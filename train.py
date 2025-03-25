@@ -5,7 +5,7 @@ import pandas as pd
 import visualise
 from linear_regression import LinearRegression
 
-FILENAME = "trained_data.json"
+TARGET_FILE = "trained_data.json"
 
 
 def get_filename() -> str:
@@ -28,6 +28,13 @@ def load_dataset(filename):
         print("Error:", e)
         exit()
 
+    if len(mileage) == 0 or len(price) == 0:
+        print("Error: No data found in", filename)
+        exit()
+    if len(mileage) != len(price):
+        print("Error: Mismatched data between mileage and price")
+        exit()
+
     return mileage, price
 
 
@@ -39,12 +46,12 @@ def print_result(model):
         print(f"{key}: {value}")
 
 
-def save_data(model):
+def save_data(model, filename):
     data = model.get_result()
-    data["data_file"] = FILENAME
+    data["data_file"] = filename
 
     try:
-        with open(FILENAME, "w") as f:
+        with open(TARGET_FILE, "w") as f:
             json.dump(data, f)
     except Exception as e:
         print("Error:", e)
@@ -58,7 +65,7 @@ def main():
     model.fit_gradient_descent(mileage, price)
 
     print_result(model)
-    save_data(model)
+    save_data(model, filename)
 
     visualise.plot_graph(mileage, price, model)
 

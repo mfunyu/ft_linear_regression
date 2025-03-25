@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 
 def plot_graph(mileage, price, model):
     plt.scatter(mileage, price)
-    print(mileage, price)
 
     x = np.arange(0, np.max(mileage) + 1)
     y = model.predict(x)

@@ -32,7 +32,6 @@ class LinearRegression:
     def predict(self, x, normalize=True):
         if normalize:
             x = self.normalize_data(x)
-            print(x)
         return self.__theta0 + self.__theta1 * x
 
     def get_result(self):
@@ -42,9 +41,3 @@ class LinearRegression:
             "mean": self.mean,
             "std": self.std
         }
-
-    def get_theta0(self):
-        return self.__theta0
-
-    def get_theta1(self):
-        return self.__theta1
