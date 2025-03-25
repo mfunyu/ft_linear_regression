@@ -1,8 +1,8 @@
 train	:
-	python3 train.py data/data.csv
+	python3 src/train.py data/data.csv
 
 predict	:
-	python3 predict.py
+	python3 src/predict.py
 
 setup	:
 	pip install -r requirements.txt
