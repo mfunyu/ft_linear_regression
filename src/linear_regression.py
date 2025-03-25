@@ -15,6 +15,8 @@ class LinearRegression:
         return (x - self.__mean) / self.__std
 
     def fit_gradient_descent(self, x, y):
+        self.__theta0 = 0
+        self.__theta1 = 0
         self.__mean = np.mean(x)
         self.__std = np.std(x) if np.std(x) != 0 else self.__mean
         x = self.normalize_data(x)
@@ -41,3 +43,17 @@ class LinearRegression:
             "mean": self.__mean,
             "std": self.__std
         }
+
+    def compute_cost(self, x, y):
+        m = len(x)
+
+        prediction = self.predict(x)
+        error = prediction - y
+
+        return np.sum(error ** 2) / m
+
+    def set_learning_rate(self, learning_rate):
+        self.__learning_rate = learning_rate
+
+    def set_iteration(self, iteration):
+        self.__iteration = iteration

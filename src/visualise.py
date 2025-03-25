@@ -10,8 +10,16 @@ def plot_graph(mileage, price, model):
     y = np.round(y)
 
     plt.plot(x, y)
-    plt.xlabel('Mileage')
-    plt.ylabel('Price')
+    plt.xlabel("Mileage")
+    plt.ylabel("Price")
     plt.xlim(xmin=0)
 
+    plt.show()
+
+
+def plot_cost(x, y, x_label):
+    plt.plot(x, y)
+
+    plt.xlabel(x_label)
+    plt.ylabel("Mean squared error")
     plt.show()
