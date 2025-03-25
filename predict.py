@@ -9,23 +9,21 @@ def get_data():
     try:
         with open(FILENAME, "r") as f:
             data = json.load(f)
-            theta0 = data.get("theta0", 0)
-            theta1 = data.get("theta1", 0)
     except FileNotFoundError:
         print(f"Warning: {FILENAME} not found")
-        theta0 = 0
-        theta1 = 0
+        data = {}
     except Exception as e:
         print("Error:", e)
         exit()
 
-    return theta0, theta1
+    return data
 
 
 def main():
-    theta0, theta1 = get_data()
+    data = get_data()
 
-    model = LinearRegression(theta0, theta1)
+    model = LinearRegression(data.get("theta0", 0), data.get("theta1", 0),
+                             mean=data.get("mean", 0), std=data.get("std", 1))
 
     while (1):
         try:
@@ -36,7 +34,7 @@ def main():
             continue
 
         estimated_price = model.predict(mileage)
-        print("Estimated price:", estimated_price)
+        print("Estimated price:", round(estimated_price))
 
 
 if __name__ == "__main__":

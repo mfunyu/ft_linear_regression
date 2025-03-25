@@ -1,8 +1,8 @@
 import sys
 import json
 import pandas as pd
-import matplotlib.pyplot as plt
 
+import visualise
 from linear_regression import LinearRegression
 
 FILENAME = "trained_data.json"
@@ -32,21 +32,17 @@ def load_dataset(filename):
 
 
 def print_result(model):
-    theta0 = model.get_theta0()
-    theta1 = model.get_theta1()
+    data = model.get_result()
 
     print("\n[Calculated data]")
-    print("Theta0:", theta0)
-    print("Theta1:", theta1)
-    print(f"y = {theta0} + {theta1} * x")
+    for key, value in data.items():
+        print(f"{key}: {value}")
 
 
 def save_data(model):
-    data = {
-        "data_file": FILENAME,
-        "theta0": model.get_theta0(),
-        "theta1": model.get_theta1()
-    }
+    data = model.get_result()
+    data["data_file"] = FILENAME
+
     try:
         with open(FILENAME, "w") as f:
             json.dump(data, f)
@@ -54,26 +50,17 @@ def save_data(model):
         print("Error:", e)
 
 
-def plot_graph(mileage, price, model):
-    y = model.predict(mileage)
-    print(mileage, y)
-
-    plt.scatter(mileage, price)
-
-    plt.plot(mileage, y)
-    plt.show()
-
-
 def main():
     filename = get_filename()
     mileage, price = load_dataset(filename)
 
-    model = LinearRegression(learning_rate=0.001, iteration=10)
+    model = LinearRegression(learning_rate=0.01, iteration=1000)
     model.fit_gradient_descent(mileage, price)
 
     print_result(model)
     save_data(model)
-    plot_graph(mileage, price, model)
+
+    visualise.plot_graph(mileage, price, model)
 
 
 if __name__ == "__main__":
