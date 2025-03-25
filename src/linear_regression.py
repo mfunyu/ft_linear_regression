@@ -6,26 +6,26 @@ class LinearRegression:
                  learning_rate=0.001, iteration=1000):
         self.__theta0 = theta0
         self.__theta1 = theta1
-        self.learning_rate = learning_rate
-        self.iteration = iteration
-        self.mean = mean
-        self.std = std
+        self.__learning_rate = learning_rate
+        self.__iteration = iteration
+        self.__mean = mean
+        self.__std = std
 
     def normalize_data(self, x):
-        return (x - self.mean) / self.std
+        return (x - self.__mean) / self.__std
 
     def fit_gradient_descent(self, x, y):
-        self.mean = np.mean(x)
-        self.std = np.std(x) if np.std(x) != 0 else self.mean
+        self.__mean = np.mean(x)
+        self.__std = np.std(x) if np.std(x) != 0 else self.__mean
         x = self.normalize_data(x)
         m = len(x)
 
-        for _ in range(self.iteration):
+        for _ in range(self.__iteration):
             prediction = self.predict(x, normalize=False)
             error = prediction - y
 
-            tmp_theta0 = self.learning_rate * (np.sum(error) / m)
-            tmp_theta1 = self.learning_rate * (np.sum(error * x) / m)
+            tmp_theta0 = self.__learning_rate * (np.sum(error) / m)
+            tmp_theta1 = self.__learning_rate * (np.sum(error * x) / m)
             self.__theta0 -= tmp_theta0
             self.__theta1 -= tmp_theta1
 
@@ -38,6 +38,6 @@ class LinearRegression:
         return {
             "theta0": self.__theta0,
             "theta1": self.__theta1,
-            "mean": self.mean,
-            "std": self.std
+            "mean": self.__mean,
+            "std": self.__std
         }
