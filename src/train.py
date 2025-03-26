@@ -1,42 +1,11 @@
-import sys
 import json
-import pandas as pd
 import numpy as np
 
+import utils
 import visualise
 from linear_regression import LinearRegression
 
 TARGET_FILE = "trained_data.json"
-
-
-def get_filename() -> str:
-    if len(sys.argv) != 2:
-        print("[Usage] python3 predict.py [filename]")
-        exit()
-
-    return sys.argv[1]
-
-
-def load_dataset(filename):
-    try:
-        with open(filename, "r") as csvfile:
-            print("Loading data from", filename)
-            data_frame = pd.read_csv(csvfile)
-            mileage = data_frame["km"].values
-            price = data_frame["price"].values
-
-    except Exception as e:
-        print("Error:", e)
-        exit()
-
-    if len(mileage) == 0 or len(price) == 0:
-        print("Error: No data found in", filename)
-        exit()
-    if len(mileage) != len(price):
-        print("Error: Mismatched data between mileage and price")
-        exit()
-
-    return mileage, price
 
 
 def print_result(model):
@@ -88,10 +57,13 @@ def run_analysis(model, mileage, price):
 
 
 def main():
-    filename = get_filename()
-    mileage, price = load_dataset(filename)
+    filename = utils.get_filename_from_arg()
+    if not filename:
+        print("[Usage] python train.py <filename>")
+        exit()
+    mileage, price = utils.load_dataset_from_csv(filename)
 
-    model = LinearRegression(learning_rate=0.01, iteration=1000)
+    model = LinearRegression(learning_rate=1, iteration=1000)
     model.fit_gradient_descent(mileage, price)
 
     print_result(model)
