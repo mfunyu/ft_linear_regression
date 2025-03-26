@@ -18,16 +18,17 @@ class LinearRegression:
         self.__theta0 = 0
         self.__theta1 = 0
         self.__mean = np.mean(x)
-        self.__std = np.std(x) if np.std(x) != 0 else self.__mean
+        self.__std = np.std(x)
+        if self.__std == 0:
+            self.__std = self.__mean
         x = self.normalize_data(x)
-        m = len(x)
 
         for _ in range(self.__iteration):
             prediction = self.predict(x, normalize=False)
             error = prediction - y
 
-            tmp_theta0 = self.__learning_rate * (np.sum(error) / m)
-            tmp_theta1 = self.__learning_rate * (np.sum(error * x) / m)
+            tmp_theta0 = self.__learning_rate * np.mean(error)
+            tmp_theta1 = self.__learning_rate * np.mean(error * x)
             self.__theta0 -= tmp_theta0
             self.__theta1 -= tmp_theta1
 
@@ -45,12 +46,10 @@ class LinearRegression:
         }
 
     def compute_cost(self, x, y):
-        m = len(x)
-
         prediction = self.predict(x)
         error = prediction - y
 
-        return np.sum(error ** 2) / m
+        return np.mean(error ** 2)
 
     def set_learning_rate(self, learning_rate):
         self.__learning_rate = learning_rate
