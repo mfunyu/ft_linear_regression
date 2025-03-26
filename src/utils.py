@@ -1,6 +1,6 @@
 import json
-import sys
 import pandas as pd
+import argparse
 
 
 def get_json_data_from_file(filename) -> dict:
@@ -15,13 +15,6 @@ def get_json_data_from_file(filename) -> dict:
         exit()
 
     return data
-
-
-def get_filename_from_arg() -> str:
-    if len(sys.argv) != 2:
-        return None
-
-    return sys.argv[1]
 
 
 def load_dataset_from_csv(filename):
@@ -44,3 +37,29 @@ def load_dataset_from_csv(filename):
         exit()
 
     return mileage, price
+
+
+def _validate_learning_rate(value):
+    float_value = float(value)
+    if float_value < 0 or float_value > 1:
+        raise argparse.ArgumentTypeError("Learning rate must be between 0 and 1.")
+    return float_value
+
+
+def _validate_iteration(value):
+    int_value = int(value)
+    if int_value < 0:
+        raise argparse.ArgumentTypeError("Iteration must be a positive integer.")
+    return int_value
+
+
+def get_arg_options():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('filename', type=str, help='Filename to process')
+    parser.add_argument('-l', type=_validate_learning_rate, default=0.01, help="Learning rate")
+    parser.add_argument('-i', type=_validate_iteration, default=1000, help="Number of iterations")
+
+    args = parser.parse_args()
+
+    return args.filename, args.l, args.i

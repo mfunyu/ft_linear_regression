@@ -3,7 +3,7 @@ import numpy as np
 
 class LinearRegression:
     def __init__(self, theta0=0, theta1=0, mean=0, std=1,
-                 learning_rate=0.001, iteration=1000):
+                 learning_rate=0.01, iteration=1000):
         self.__theta0 = theta0
         self.__theta1 = theta1
         self.__learning_rate = learning_rate
@@ -45,11 +45,17 @@ class LinearRegression:
             "std": self.__std
         }
 
-    def compute_cost(self, x, y):
+    def compute_cost_mse(self, x, y):
         prediction = self.predict(x)
         error = prediction - y
 
         return np.mean(error ** 2)
+
+    def compute_cost_mae(self, x, y):
+        prediction = self.predict(x)
+        error = prediction - y
+
+        return np.mean(np.abs(error))
 
     def set_learning_rate(self, learning_rate):
         self.__learning_rate = learning_rate
